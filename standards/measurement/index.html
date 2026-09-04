@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Measurement Standard | Paul Weibel</title>
+  <meta name="description" content="How Paul Weibel measures detection quality, program health, coverage, and the limits behind the 300 to 75 alert result.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/standards/measurement/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Measurement Standard | Paul Weibel">
+  <meta property="og:description" content="How Paul Weibel measures detection quality, program health, coverage, and the limits behind the 300 to 75 alert result.">
+  <meta property="og:url" content="https://paulweibel.com/standards/measurement/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Paul Weibel security engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Measurement Standard | Paul Weibel">
+  <meta name="twitter:description" content="How Paul Weibel measures detection quality, program health, coverage, and the limits behind the 300 to 75 alert result.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta name="twitter:image:alt" content="Paul Weibel security engineering portfolio">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/">Case studies</a><a href="/standards/measurement/" aria-current="page">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="page-hero"><div class="container"><div><p class="kicker">Measurement standard</p><h1>How I measure detection quality.</h1><p class="page-lede">Every figure on this site should survive a follow-up question. This is the measurement model I use to challenge detection work: what to measure per detection and across the program, what not to use alone, and how to question the 300 → 75 result.</p><div class="hero-actions"><a class="button primary" href="#pushback">Challenge the 300 → 75 number <span aria-hidden="true">→</span></a><a class="button secondary" href="/standards/detection/">Review the detection standard</a></div></div><ul class="page-facts"><li><b>5 per-detection measures</b>accuracy intentionally excluded</li><li><b>6 program measures</b>each with a cost side</li><li><b>4 coverage columns</b>instead of one percentage</li></ul></div></section>
+<section class="section"><div class="container">
+<div class="section-intro"><div><span class="index">01 · Per-detection measures</span><h2>Per-detection measures.</h2></div><p class="section-summary">Each detection has its own quality. The useful measures are computed per rule before anything is aggregated, because an average hides the one rule that is generating most of the noise.</p></div>
+<div aria-label="Scrollable per-detection measures table" class="table-wrap" role="region" tabindex="0"><table class="decision-table"><thead><tr><th>Measure</th><th>Definition</th><th>What it tells you</th></tr></thead><tbody><tr><td>Precision</td><td>TP / (TP + FP)</td><td>When this fires, how often does it matter. This is the primary quality measure I want at the rule level.</td></tr><tr><td>Noisiness</td><td>FP / (TP + FP)</td><td>The inverse, stated the way analysts feel it. Useful for ordering tuning work.</td></tr><tr><td>Recall</td><td>TP / (TP + FN)</td><td>Estimable only against known incidents and emulated attacks, never against the unknown. Report it only for the scenarios that were actually tested.</td></tr><tr><td>Accuracy</td><td>Not used</td><td>True negatives are not enumerable in a SIEM, so I do not use accuracy as a detection-program measure.</td></tr><tr><td>Contribution</td><td>Share of an aggregate alert or risk object attributable to one rule</td><td>Catches the rule that is quietly pushing risk objects over a threshold on volume alone.</td></tr></tbody></table></div>
+</div></section>
+<section class="section section-toned"><div class="container">
+<div class="section-intro"><div><span class="index">02 · Program measures</span><h2>Program measures.</h2></div><p class="section-summary">I use these alongside volume because they show whether the remaining detections are useful and whether analyst cost is moving in the right direction.</p></div>
+<ol class="measure-list"><li><span>RATIO</span><h3>Alerts per confirmed incident</h3><p>How many alerts an analyst handles for each confirmed incident. It improves only when precision improves, not when rules are switched off.</p></li><li><span>COST</span><h3>Analyst minutes per confirmed incident</h3><p>The cost side of the same trade. Volume can fall while cost per incident rises, and that is a regression dressed as a win.</p></li><li><span>HEALTH</span><h3>Detection health</h3><p>The share of deployed detections that executed successfully and returned results inside a defined window. A scheduled search can exist and still fail or return nothing, so execution health needs its own check.</p></li><li><span>FRESHNESS</span><h3>Validation freshness</h3><p>The share of detections exercised against emulated behavior within the last quarter. A rule that has not been tested recently should not be treated as fully validated.</p></li><li><span>FLOW</span><h3>Time to deploy a detection</h3><p>From idea or incident finding to production, review included. This shows how much time the review and release path adds.</p></li><li><span>TRUST</span><h3>Analyst disposition rate</h3><p>The share of risk incidents an analyst can disposition without reverse-engineering the search. Low disposition rates mean the analyst contract is broken, whatever the precision figure says.</p></li></ol>
+</div></section>
+<section class="section"><div class="container">
+<div class="section-intro"><div><span class="index">03 · Coverage</span><h2>Coverage, split into four things.</h2></div><p class="section-summary">I split ATT&amp;CK coverage into four parts because the underlying telemetry, procedure coverage, depth, and validation freshness can fail independently.</p></div>
+<div aria-label="Scrollable coverage columns table" class="table-wrap" role="region" tabindex="0"><table class="decision-table"><thead><tr><th>Column</th><th>Question it answers</th><th>How it fails on its own</th></tr></thead><tbody><tr><td>Visibility</td><td>Do we collect the telemetry this technique would appear in, at usable quality and retention?</td><td>A feed goes silent and the heatmap stays green.</td></tr><tr><td>Procedure coverage</td><td>Of the specific procedures that matter for our threat model, how many have a detection?</td><td>Technique-level counting marks a technique covered when one narrow procedure has a rule.</td></tr><tr><td>Depth</td><td>How many independent layers would observe it: endpoint, identity, network, cloud control plane, application?</td><td>One layer is a single point of failure that a coverage count does not show.</td></tr><tr><td>Validation freshness</td><td>When was each of those detections last exercised successfully?</td><td>A rule that fired once at deployment is counted forever.</td></tr></tbody></table></div>
+<div class="scope-note"><span>WHY SPLIT</span><p>A green coverage map is misleading if the underlying telemetry is missing. I separate visibility from detection coverage so feed-health problems cannot masquerade as either clean activity or complete coverage.</p></div>
+</div></section>
+<section class="section section-toned"><div class="container">
+<div class="section-intro"><div><span class="index">04 · Not reported</span><h2>Measures I do not use alone.</h2></div><p class="section-summary">Each of these is easy to produce and easy to move in the wrong direction while security gets worse. I will report them when an organization already tracks them, next to something that cannot be gamed the same way.</p></div>
+<ul class="failure-list"><li><b>Rule count.</b> More rules means more maintenance and, past a point, more noise. I have retired detections deliberately and count that as work delivered.</li><li><b>A single ATT&amp;CK coverage percentage.</b> See above. Tactic-level coverage flatters the number further, because a tactic looks covered when one technique under it has a rule.</li><li><b>Mean time to detect, on its own.</b> The clock starts at a point nobody defines consistently, and the measure rewards detecting easy things quickly.</li><li><b>Alert volume reduction, unqualified.</b> Including my own. The next section is the qualification.</li></ul>
+</div></section>
+<section class="section" id="pushback"><div class="container">
+<div class="section-intro"><div><span class="index">05 · Pushback</span><h2>What the 300 → 75 result does and does not prove.</h2></div><p class="section-summary">The homepage shows daily alerts moving from about 300 to about 75. Alert volume alone does not prove better detection; suppression can produce the same graph. These are the checks I use to challenge the result.</p></div>
+<div class="qa-list">
+<details open><summary>What did you give up?</summary><p>Sensitivity at the individual-rule level, deliberately. Weak indicators stopped raising their own alerts. They did not stop being collected or evaluated: they became scored risk contributions against a user or a system, so the evidence survived and only the interruption went away.</p></details>
+<details open><summary>Did precision improve, or did alert volume just fall?</summary><p>The supported result is 300 to 75 daily alerts with coverage retained. That does not, by itself, prove precision improved. The design moved lower-confidence behaviors into risk contributions and reserved analyst-facing incidents for accumulated risk. To prove a precision gain, I would compare incident-rule precision and analyst disposition over the same window.</p></details>
+<details open><summary>How do you defend the coverage claim?</summary><p>The supported result is that coverage was retained. I do not publish employer validation data. For a redesign at this scale, I would want a known-positive replay or representative fixture set, boundary tests, and before/after analyst dispositions before retiring the old path.</p></details>
+<details open><summary>Was 300 a day a healthy baseline?</summary><p>No. The original model was already too noisy. The reduction matters only if known incidents still surface and the remaining incidents are easier to work.</p></details>
+<details open><summary>What would you show me alongside the alert count?</summary><p>Per-incident-rule precision before and after, true positives held flat or improved over the same window, analyst minutes per confirmed incident, and the regression set passing in full. Alert volume is easy to read; those measures tell me whether the change was actually better.</p></details>
+</div>
+</div></section>
+<section class="section section-toned"><div class="container">
+<div class="section-intro"><div><span class="index">06 · Next improvements</span><h2>What I would strengthen next.</h2></div><p class="section-summary">These are the first three improvements I would make to the measurement model.</p></div>
+<ul class="failure-list"><li><b>Instrument first.</b> Start precision and analyst-disposition tracking before changing the alert model, not after.</li><li><b>Automate regression.</b> Put the known-positive replay or representative fixture set directly in the rule-change path instead of treating validation as a separate project.</li><li><b>Scope recall honestly.</b> Report recall only for the scenarios the regression set actually exercises; do not turn a narrow test set into a broad coverage claim.</li></ul>
+</div></section>
+<section class="section"><div class="container">
+<div class="standard-evidence"><div><span>Measurement basis</span><h3>Why I use these measures.</h3><p>They answer different questions: whether a detection is noisy, whether its telemetry is healthy, whether it has been tested recently, and whether the program still covers the behaviors it claims to cover. I prefer measures that expose a failure mode instead of hiding it behind one score.</p></div><div class="artifact-list"><a href="/work/rba/"><span>The case study behind the number</span><span>→</span></a><a href="/standards/detection/"><span>The lifecycle these measures gate</span><span>→</span></a><a href="/evidence/rba-risk-incident.spl"><span>rba-risk-incident.spl</span><span>risk incident rule</span></a><a href="/skills/"><span>Skills and role fit</span><span>→</span></a></div></div>
+</div></section>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

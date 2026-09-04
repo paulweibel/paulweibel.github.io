@@ -1,0 +1,32 @@
+/*
+  Representative risk incident rule: the aggregation half of risk-based
+  alerting. Sanitized reconstruction; thresholds are illustrative, not
+  production values.
+
+  Risk rules (see rba-representative.spl) write scored risk events per
+  object into the Risk data model. This clean-room example watches the
+  accumulated picture per object and raises one notable when the score
+  crosses an illustrative threshold. ATT&CK annotations remain useful
+  analyst context but are not asserted here as a production trigger.
+*/
+| tstats summariesonly=true
+    sum(All_Risk.calculated_risk_score) as risk_score
+    values(All_Risk.annotations.mitre_attack.mitre_tactic_id) as tactics
+    values(All_Risk.annotations.mitre_attack.mitre_technique_id)
+        as techniques
+    dc(source) as contributing_rules
+    values(All_Risk.risk_message) as risk_messages
+    min(_time) as first_seen max(_time) as last_seen
+    from datamodel=Risk.All_Risk
+    where All_Risk.risk_object_type IN ("user", "system") earliest=-24h
+    by All_Risk.risk_object All_Risk.risk_object_type
+| rename All_Risk.* as *
+| where risk_score >= 100
+| eval trigger="score_threshold"
+| table risk_object risk_object_type risk_score contributing_rules
+        trigger tactics techniques risk_messages first_seen last_seen
+
+/*
+  Production-specific thresholds, throttling, weighting, contribution
+  caps, and escalation details are intentionally not represented here.
+*/

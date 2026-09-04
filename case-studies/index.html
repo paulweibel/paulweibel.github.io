@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Case Studies | Paul Weibel</title>
+  <meta name="description" content="Five security engineering case studies covering risk-based alerting, RC4 remediation, telemetry, security automation, and Splunk operational health.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/case-studies/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Case Studies | Paul Weibel">
+  <meta property="og:description" content="Five security engineering case studies covering risk-based alerting, RC4 remediation, telemetry, security automation, and Splunk operational health.">
+  <meta property="og:url" content="https://paulweibel.com/case-studies/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Paul Weibel security engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Studies | Paul Weibel">
+  <meta name="twitter:description" content="Five security engineering case studies covering risk-based alerting, RC4 remediation, telemetry, security automation, and Splunk operational health.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta name="twitter:image:alt" content="Paul Weibel security engineering portfolio">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/" aria-current="page">Case studies</a><a href="/standards/measurement/">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="page-hero"><div class="container"><div><p class="kicker">Case studies</p><h1>Five security engineering case studies.</h1><p class="page-lede">Sanitized technical work with concrete outcomes, architecture, implementation examples, validation, and failure modes. Proprietary details stay generalized.</p></div><ul class="page-facts"><li><b>5 cases</b>each with an inspectable artifact</li><li><b>8 sections each</b>problem through validation and failure modes</li><li><b>2 standards</b>detection and measurement</li></ul></div></section><section class="section section-toned"><div class="container standard-teaser"><div><span class="index">Operating standard</span><h2>How I maintain production detections.</h2><p>The standard covers telemetry contracts, test cases, analyst context, health monitoring, change control, retirement, and measurement.</p></div><div class="hero-actions"><a class="button primary" href="/standards/detection/">Review the detection standard <span aria-hidden="true">→</span></a><a class="button secondary" href="/standards/measurement/">See how I measure it</a></div></div></section>
+<section class="section"><div class="container"><ol class="case-index-grid">
+<li><a href="/work/rba/"><div class="index-id"><span class="case-id">CASE_01</span><span class="ledger-domain">Detection</span></div><div class="index-body"><h2>Risk-based alerting without losing coverage</h2><p>Risk aggregation in Splunk ES, ATT&amp;CK-annotated risk rules, a risk incident rule, and a clear regression-validation model.</p></div><strong>300 <i>→</i> 75<small>daily alerts</small></strong><span class="ledger-arrow" aria-hidden="true">→</span></a></li>
+<li><a href="/work/rc4/"><div class="index-id"><span class="case-id">CASE_02</span><span class="ledger-domain">Detect + remediate</span></div><div class="index-body"><h2>RC4 detection to measurable remediation</h2><p>Detection as the start of the control loop: measure, coordinate remediation with platform owners, re-measure, and keep the regression guard.</p></div><strong>98%<small>reduction, 8,000 systems</small></strong><span class="ledger-arrow" aria-hidden="true">→</span></a></li>
+<li><a href="/work/telemetry/"><div class="index-id"><span class="case-id">CASE_03</span><span class="ledger-domain">Telemetry</span></div><div class="index-body"><h2>Making nonstandard security data usable</h2><p>Collection, parsing, CIM normalization, production Technology Add-ons, and feed health treated as part of detection engineering.</p></div><strong>30+<small>sources onboarded</small></strong><span class="ledger-arrow" aria-hidden="true">→</span></a></li>
+<li><a href="/work/agentic-soc/"><div class="index-id"><span class="case-id">CASE_04</span><span class="ledger-domain">Automation</span></div><div class="index-body"><h2>Reducing recurring SOC work with human approval</h2><p>Python, PowerShell, and LLM-assisted workflows with read-only Splunk access and explicit human approval before state changes.</p></div><strong>~30%<small>less recurring work</small></strong><span class="ledger-arrow" aria-hidden="true">→</span></a></li>
+<li><a href="/work/ops-report/"><div class="index-id"><span class="case-id">CASE_05</span><span class="ledger-domain">Platform</span></div><div class="index-body"><h2>Splunk operational health in a daily exception digest</h2><p>Ingest, forwarder, and search health distilled into a daily digest that ranks exceptions instead of adding another dashboard.</p></div><strong class="text-metric">Daily<small>exception digest</small></strong><span class="ledger-arrow" aria-hidden="true">→</span></a></li>
+</ol></div></section>
+<section class="section section-toned" id="evidence-index"><div class="container"><div class="section-intro"><div><span class="index">Evidence index</span><h2>Evidence index.</h2></div><p class="section-summary">Outcome, engineering work, and public clean-room artifact for each case.</p></div><div aria-label="Scrollable case-study evidence matrix" class="table-wrap evidence-matrix-wrap" role="region" tabindex="0"><table class="decision-table evidence-matrix"><thead><tr><th>Case</th><th>Outcome</th><th>Validation</th><th>Public artifact</th></tr></thead><tbody>
+<tr><td><a href="/work/rba/">Risk-based alerting</a></td><td>300 → 75 daily alerts</td><td>Detection lifecycle + coverage-retention result</td><td><a href="/evidence/rba-representative.spl">Risk rule SPL</a> + <a href="/evidence/rba-risk-incident.spl">incident rule SPL</a></td></tr>
+<tr><td><a href="/work/rc4/">RC4 remediation</a></td><td>98% reduction</td><td>Detection → remediation → regression guard</td><td><a href="/evidence/rc4-regression-guard.spl">SPL</a></td></tr>
+<tr><td><a href="/work/telemetry/">Telemetry engineering</a></td><td>30+ sources</td><td>CIM + parsing + feed health</td><td><a href="/evidence/telemetry-feed-health.spl">SPL</a></td></tr>
+<tr><td><a href="/work/agentic-soc/">Security automation</a></td><td>about 30% less recurring work</td><td>Read-only scope + human gate</td><td><a href="/evidence/agentic-soc-control-model.yaml">YAML</a></td></tr>
+<tr><td><a href="/work/ops-report/">Splunk Ops Report</a></td><td>Daily exception surface</td><td>Durable inventory + health logic</td><td><a href="/evidence/ops-report-health.spl">SPL</a></td></tr>
+</tbody></table></div></div></section></main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

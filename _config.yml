@@ -1,7 +1,0 @@
-title: Paul Weibel
-description: Detection engineering · Splunk · Sigma · GenAI threat detection
-theme: minima
-url: "paulweibel.github.io"
-plugins:
-  - jekyll-seo-tag
-  - jekyll-sitemap

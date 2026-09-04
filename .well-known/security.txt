@@ -1,0 +1,4 @@
+Contact: mailto:contact@paulweibel.com
+Canonical: https://paulweibel.com/.well-known/security.txt
+Preferred-Languages: en
+Expires: 2027-09-03T23:59:59Z

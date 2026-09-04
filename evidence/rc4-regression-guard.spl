@@ -1,0 +1,31 @@
+/*
+  Representative SPL shape for measuring legacy-cipher use, then keeping
+  the same search as a regression guard after remediation. Sanitized
+  reconstruction.
+
+  The production event source and exact cipher observable are
+  generalized on purpose. `legacy_cipher_observed` represents the
+  source-specific test
+  used in production; this public artifact demonstrates the measurement
+  pattern without asserting whether the underlying source was Kerberos,
+  TLS, or another control-plane record.
+*/
+index=<security_index> sourcetype=<security_sourcetype>
+    `legacy_cipher_observed`
+| eval affected_system = coalesce(client_host, src_nt_host, src, dest)
+| bin _time span=1d
+| stats dc(affected_system) as systems_still_observed
+        dc(user) as accounts_involved
+        count as observations
+    by _time
+| eval control_state = if(systems_still_observed > 0,
+                          "REGRESSION_VISIBLE", "CLEAR")
+| sort - _time
+
+/*
+  As a program measure, the weekly trend of
+  systems_still_observed is the
+  number that moves only when a fix lands. As a guard after remediation,
+  alert on any day where the count rises above the documented exception
+  population.
+*/

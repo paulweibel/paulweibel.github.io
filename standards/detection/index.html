@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Production Detection Standard | Paul Weibel</title>
+  <meta name="description" content="Paul Weibel&#x27;s production detection standard for telemetry contracts, validation, analyst context, control health, change management, and retirement.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/standards/detection/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Production Detection Standard | Paul Weibel">
+  <meta property="og:description" content="Paul Weibel&#x27;s production detection standard for telemetry contracts, validation, analyst context, control health, change management, and retirement.">
+  <meta property="og:url" content="https://paulweibel.com/standards/detection/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Paul Weibel security engineering portfolio">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Production Detection Standard | Paul Weibel">
+  <meta name="twitter:description" content="Paul Weibel&#x27;s production detection standard for telemetry contracts, validation, analyst context, control health, change management, and retirement.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-card.png">
+  <meta name="twitter:image:alt" content="Paul Weibel security engineering portfolio">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/" aria-current="page">Case studies</a><a href="/standards/measurement/">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="page-hero"><div class="container"><div><p class="kicker">Production detection standard</p><h1>How I maintain production detections.</h1><p class="page-lede">My operating model for taking a detection from a behavior hypothesis into production, then validating, monitoring, changing, and eventually retiring it.</p><div class="hero-actions"><a class="button primary" href="/work/rba/">See it applied in the RBA case <span aria-hidden="true">→</span></a><a class="button secondary" href="/standards/measurement/">See how the program is measured</a></div></div><ul class="page-facts"><li><b>8 gates</b>intent to retirement, each with an exit criterion</li><li><b>4 release checks</b>data, logic, test, operations</li><li><b>6 public artifacts</b>clean-room SPL and YAML</li></ul></div></section>
+<section class="section"><div class="container">
+<div class="section-intro"><div><span class="index">01 · Lifecycle</span><h2>Eight gates from intent to retirement.</h2></div><p class="section-summary">The sequence follows how a detection is operated. Logic quality is only one part of a control that also depends on telemetry, analyst usability, health, regression testing, and change discipline.</p></div>
+<div class="gate-list"><div class="gate-row"><span>01</span><h3>Intent</h3><p>Define the attacker behavior or security condition, why it matters, and what decision the control is expected to enable.</p><b>EXIT: behavior is specific enough to test.</b></div><div class="gate-row"><span>02</span><h3>Telemetry contract</h3><p>Define required sources, fields, timestamps, normalization, expected latency, and how missing or degraded data will be detected.</p><b>EXIT: absence cannot masquerade as safety.</b></div><div class="gate-row"><span>03</span><h3>Logic</h3><p>Implement the smallest defensible query or correlation path, preserve useful source context, and make aggregation semantics explicit.</p><b>EXIT: behavior maps to inspectable evidence.</b></div><div class="gate-row"><span>04</span><h3>Validation</h3><p>Replay known-positive scenarios, test benign and boundary cases, and verify the logic behaves as expected with incomplete or late data. Record per-rule precision from the first day, not after cutover.</p><b>EXIT: expected and non-expected paths are exercised.</b></div><div class="gate-row"><span>05</span><h3>Analyst contract</h3><p>Explain why the detection fired, what evidence matters, what uncertainty remains, and what the next investigation step should be.</p><b>EXIT: an analyst can act without reverse-engineering the search.</b></div><div class="gate-row"><span>06</span><h3>Operating health</h3><p>Monitor source health, execution failures, runtime, volume, precision, and abnormal silence independently from detection output.</p><b>EXIT: control degradation is observable.</b></div><div class="gate-row"><span>07</span><h3>Change control</h3><p>Tune with evidence, rerun regression cases, document the reason for change, and preserve a rollback path when the production effect is uncertain.</p><b>EXIT: changes are reproducible and reviewable.</b></div><div class="gate-row"><span>08</span><h3>Retirement</h3><p>Retire or merge a control when telemetry disappears, the behavior is covered better elsewhere, or analyst cost exceeds retained security value.</p><b>EXIT: stale rules do not become permanent inventory.</b></div></div>
+</div></section>
+<section class="section section-toned"><div class="container">
+<div class="section-intro"><div><span class="index">02 · Release gate</span><h2>Before a detection reaches production.</h2></div><p class="section-summary">Not every environment can automate every check, but I want these questions answered before a rule starts interrupting analysts.</p></div>
+<div class="quality-grid">
+<article><span>DATA</span><h3>Telemetry is trustworthy</h3><ul><li>Required fields exist and mean what the detection assumes.</li><li>Timestamp and latency behavior fit the search window.</li><li>Feed health is monitored separately.</li></ul></article>
+<article><span>LOGIC</span><h3>Behavior is explainable</h3><ul><li>Conditions and aggregation have a clear security rationale.</li><li>Source context survives normalization where it matters.</li><li>Thresholds are treated as tunable assumptions, not facts.</li></ul></article>
+<article><span>TEST</span><h3>Expected paths were exercised</h3><ul><li>Known-positive replay or representative fixture.</li><li>Benign / false-positive case.</li><li>Boundary and missing-data case.</li></ul></article>
+<article><span>OPS</span><h3>The control can be operated</h3><ul><li>Analyst output explains why it fired.</li><li>Execution and silence can be monitored.</li><li>Owner, review path, and rollback are clear.</li></ul></article>
+</div>
+<div class="standard-evidence"><div><span>Public evidence</span><h3>Representative artifacts</h3><p>Public snippets are clean-room reconstructions, not production exports. They exist so query shape, test intent, and control boundaries can be inspected without publishing employer configuration. Every case-study code panel is rendered directly from these files.</p></div><div class="artifact-list"><a href="/evidence/rba-representative.spl"><span>rba-representative.spl</span><span>risk rule</span></a><a href="/evidence/rba-risk-incident.spl"><span>rba-risk-incident.spl</span><span>risk incident rule</span></a><a href="/evidence/telemetry-feed-health.spl"><span>telemetry-feed-health.spl</span><span>feed health</span></a><a href="/evidence/rc4-regression-guard.spl"><span>rc4-regression-guard.spl</span><span>regression guard</span></a><a href="/evidence/ops-report-health.spl"><span>ops-report-health.spl</span><span>forwarder health</span></a><a href="/evidence/agentic-soc-control-model.yaml"><span>agentic-soc-control-model.yaml</span><span>agent control model</span></a><a href="https://github.com/paulweibel/paulweibel.github.io/tree/main/evidence"><span>github.com/paulweibel</span><span>evidence directory ↗</span></a></div></div>
+</div></section>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

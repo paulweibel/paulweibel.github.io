@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Risk-based alerting without losing coverage | Paul Weibel</title>
+  <meta name="description" content="Replacing per-event alerting with risk aggregation while cutting daily alerts from roughly 300 to 75 and retaining coverage.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/work/rba/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Risk-based alerting without losing coverage | Paul Weibel">
+  <meta property="og:description" content="Replacing per-event alerting with risk aggregation while cutting daily alerts from roughly 300 to 75 and retaining coverage.">
+  <meta property="og:url" content="https://paulweibel.com/work/rba/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-rba.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="300 to 75 daily alerts: risk-based alerting case study by Paul Weibel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Risk-based alerting without losing coverage | Paul Weibel">
+  <meta name="twitter:description" content="Replacing per-event alerting with risk aggregation while cutting daily alerts from roughly 300 to 75 and retaining coverage.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-rba.png">
+  <meta name="twitter:image:alt" content="300 to 75 daily alerts: risk-based alerting case study by Paul Weibel">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/" aria-current="page">Case studies</a><a href="/standards/measurement/">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="case-hero"><div class="container"><div class="case-breadcrumb"><a href="/case-studies/">Case studies</a><span>/</span><span>CASE_01</span></div><div class="case-hero-grid"><div><p class="kicker">DETECTION ENGINEERING</p><h1>Risk-based alerting without losing coverage</h1><p class="page-lede">Replacing per-event alerting with risk aggregation while retaining coverage and making the validation path explicit.</p></div><div class="outcome-figure"><span>Outcome</span><strong>300 <i>→</i> 75</strong><p>daily alerts after redesign, coverage retained</p></div></div></div></section>
+<div class="section"><div class="container">
+<div class="case-layout">
+<nav aria-label="Case study sections" class="case-toc">
+<div class="toc-head"><span>Case map</span><b>CASE_01</b></div>
+<a href="#system-shape"><span>01</span>System shape</a><a href="#problem"><span>02</span>Problem</a><a href="#decisions"><span>03</span>Decisions</a><a href="#implementation-evidence"><span>04</span>Implementation</a><a href="#validation"><span>05</span>Validation</a><a href="#failure-modes"><span>06</span>Failure modes</a><a href="#next-iteration"><span>07</span>Next iteration</a><a href="#panel-questions"><span>08</span>Questions</a></nav>
+<div class="case-content">
+<div aria-label="Evidence provenance" class="evidence-provenance" role="group">
+<div><span>Outcome</span><b>MEASURED RESULT</b></div>
+<div><span>Design</span><b>SANITIZED DESCRIPTION</b></div>
+<div><span>Code</span><b>CLEAN-ROOM EXAMPLE</b></div>
+<div><span>Proprietary data</span><b>NOT PUBLISHED</b></div>
+</div>
+<p class="provenance-note">Architecture is representative and omits proprietary identifiers, thresholds, hostnames, and internal topology. The code panel is a clean-room reconstruction rendered directly from the public evidence file it links to.</p>
+<section class="case-section" id="system-shape"><div class="case-section-head"><span>01</span><h2>System shape</h2><a aria-label="Link to System shape section" class="section-anchor" href="#system-shape">#</a></div><div aria-label="Scrollable representative architecture diagram" class="architecture" role="region" tabindex="0"><svg aria-label="Representative architecture flow" class="arch-svg" role="img" viewbox="0 0 920 220"><defs><marker id="arrow" markerheight="8" markerwidth="8" orient="auto" refx="7" refy="4"><path class="arrow-head" d="M0,0 L8,4 L0,8 z" fill="#65d9ed"></path></marker></defs><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="140" x="20" y="40"></rect><text class="arch-label" fill="#edf5f7" x="34" y="72">Telemetry</text><text class="arch-sub" fill="#82939d" x="34" y="98">CIM events</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="160" x2="199" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="140" x="205" y="40"></rect><text class="arch-label" fill="#edf5f7" x="219" y="72">Risk rules</text><text class="arch-sub" fill="#82939d" x="219" y="98">score + context</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="345" x2="384" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="140" x="390" y="40"></rect><text class="arch-label" fill="#edf5f7" x="404" y="72">Risk index</text><text class="arch-sub" fill="#82939d" x="404" y="98">per-object totals</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="530" x2="569" y1="86" y2="86"></line><g class="arch-node active"><rect fill="#0c1a21" height="92" rx="8" stroke="#65d9ed" stroke-width="1.2" width="140" x="575" y="40"></rect><text class="arch-label" fill="#edf5f7" x="589" y="72">Risk incidents</text><text class="arch-sub" fill="#82939d" x="589" y="98">defined threshold</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="715" x2="754" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="140" x="760" y="40"></rect><text class="arch-label" fill="#edf5f7" x="774" y="72">Analyst</text><text class="arch-sub" fill="#82939d" x="774" y="98">triage + feedback</text></g><path class="arch-replay" d="M830,132 L830,180 L90,180 L90,138" fill="none" marker-end="url(#arrow)" stroke="#6ee7aa" stroke-dasharray="6 4" stroke-width="1.4"></path><text class="arch-sub" fill="#6ee7aa" text-anchor="middle" x="460" y="204">known-positive replay / fixture for validation</text></svg></div></section>
+<section class="case-section" id="problem"><div class="case-section-head"><span>02</span><h2>Problem</h2><a aria-label="Link to Problem section" class="section-anchor" href="#problem">#</a></div><div class="prose"><p>The problem was alert volume without enough context. Roughly 300 per-event alerts a day made it harder to separate routine noise from activity that deserved investigation, and related behaviors were being reviewed as isolated events instead of as part of the same story.</p><p>The redesign moved lower-confidence behaviors into risk accumulation rather than alerting on each event. Each behavior contributes risk against a user or system, ATT&amp;CK context helps explain why it matters, and a smaller set of risk incident rules escalate accumulated risk. Daily alerts fell from roughly 300 to 75 with coverage retained.</p></div></section>
+<section class="case-section" id="decisions"><div class="case-section-head"><span>03</span><h2>Engineering decisions</h2><a aria-label="Link to Engineering decisions section" class="section-anchor" href="#decisions">#</a></div><div aria-label="Scrollable engineering decision table" class="table-wrap" role="region" tabindex="0"><table class="decision-table"><thead><tr><th>Decision</th><th>Why</th><th>Tradeoff / boundary</th></tr></thead><tbody><tr><td>Aggregate risk instead of escalating every event</td><td>Reduce duplicate analyst work and preserve context across related behaviors.</td><td>Requires disciplined modifiers and risk-incident logic so accumulation does not become opaque.</td></tr><tr><td>Annotate risk behavior with ATT&amp;CK context</td><td>Give analysts a consistent semantic layer for why behavior matters.</td><td>ATT&amp;CK mapping is context, not proof that a technique occurred.</td></tr><tr><td>Keep a known-positive regression path</td><td>Give rule changes a repeatable way to test the expected escalation path.</td><td>Known-positive tests cover known scenarios, not unknown future attacks.</td></tr><tr><td>Keep triage logic close to the detection</td><td>Make the next analyst action obvious when a risk incident fires.</td><td>Too much enrichment can hide the core reason the alert exists.</td></tr></tbody></table></div></section><section class="case-section implementation-section" id="implementation-evidence"><div class="case-section-head"><span>04</span><h2>Implementation evidence</h2><a aria-label="Link to Implementation evidence section" class="section-anchor" href="#implementation-evidence">#</a></div><div class="implementation-grid"><div class="code-panel"><div class="code-panel-head"><span>SPL</span><b>Representative risk-rule output shape</b></div><pre><code>/*
+  Representative SPL shape for a risk-rule output: the contribution half
+  of risk-based alerting. Sanitized reconstruction. Not production
+  configuration. Rows produced here become scored risk events;
+  rba-risk-incident.spl shows how they are aggregated.
+*/
+| tstats summariesonly=t count
+    min(_time) as first_seen max(_time) as last_seen
+  from datamodel=Authentication.Authentication
+  where Authentication.action="failure"
+  by Authentication.user Authentication.src
+| rename Authentication.* as *
+| eval risk_object=user,
+       risk_object_type="user",
+       risk_score=case(count&gt;=20,40,count&gt;=10,20,true(),0)
+| where risk_score&gt;0
+| eval risk_message="Repeated authentication failures from source=".src
+| table first_seen last_seen risk_object risk_object_type
+        risk_score risk_message count</code></pre></div><div class="implementation-notes"><span class="evidence-label">Sanitized reconstruction</span><p>This is a sanitized reconstruction showing normalization, risk-object construction, scoring, and analyst-facing context. It is not a production correlation search or threshold export.</p><h3>Regression cases</h3><ul class="test-list"><li>A known-positive replay or representative fixture reaches the expected escalation path.</li><li>A single weak behavior does not become an analyst-facing incident by itself.</li><li>Missing telemetry becomes a feed-health failure, not evidence of a clean environment.</li><li>Underlying behaviors remain visible enough for the analyst to explain why risk accumulated.</li></ul><div class="evidence-actions"><a class="button secondary" href="/evidence/rba-representative.spl">Open artifact</a><a class="button secondary" href="https://github.com/paulweibel/paulweibel.github.io/blob/main/evidence/rba-representative.spl">View on GitHub ↗</a></div></div></div><div class="implementation-grid implementation-grid-second"><div class="code-panel"><div class="code-panel-head"><span>SPL</span><b>Representative risk incident rule</b></div><pre><code>/*
+  Representative risk incident rule: the aggregation half of risk-based
+  alerting. Sanitized reconstruction; thresholds are illustrative, not
+  production values.
+
+  Risk rules (see rba-representative.spl) write scored risk events per
+  object into the Risk data model. This clean-room example watches the
+  accumulated picture per object and raises one notable when the score
+  crosses an illustrative threshold. ATT&amp;CK annotations remain useful
+  analyst context but are not asserted here as a production trigger.
+*/
+| tstats summariesonly=true
+    sum(All_Risk.calculated_risk_score) as risk_score
+    values(All_Risk.annotations.mitre_attack.mitre_tactic_id) as tactics
+    values(All_Risk.annotations.mitre_attack.mitre_technique_id)
+        as techniques
+    dc(source) as contributing_rules
+    values(All_Risk.risk_message) as risk_messages
+    min(_time) as first_seen max(_time) as last_seen
+    from datamodel=Risk.All_Risk
+    where All_Risk.risk_object_type IN ("user", "system") earliest=-24h
+    by All_Risk.risk_object All_Risk.risk_object_type
+| rename All_Risk.* as *
+| where risk_score &gt;= 100
+| eval trigger="score_threshold"
+| table risk_object risk_object_type risk_score contributing_rules
+        trigger tactics techniques risk_messages first_seen last_seen
+
+/*
+  Production-specific thresholds, throttling, weighting, contribution
+  caps, and escalation details are intentionally not represented here.
+*/</code></pre></div><div class="implementation-notes"><span class="evidence-label">The other half</span><p>The risk rule above contributes. This rule decides. It reads the risk index rather than raw telemetry, sums score per object, and escalates when the accumulated score crosses the representative threshold.</p><h3>Regression cases</h3><ul class="test-list"><li>Each known-positive regression case reaches the expected score-based escalation path.</li><li>A noisy contributor is visible in the contributing-rule output so it can be tuned at the source.</li><li>Risk observations older than the window fall out of the sum, so stale risk does not accumulate forever.</li><li>The output names the contributing rules, so the analyst can see which behavior drove the escalation.</li></ul><div class="evidence-actions"><a class="button secondary" href="/evidence/rba-risk-incident.spl">Open artifact</a><a class="button secondary" href="https://github.com/paulweibel/paulweibel.github.io/blob/main/evidence/rba-risk-incident.spl">View on GitHub ↗</a></div></div></div></section>
+<section class="case-section" id="validation"><div class="case-section-head"><span>05</span><h2>Validation</h2><a aria-label="Link to Validation section" class="section-anchor" href="#validation">#</a></div><div class="prose validated"><p>The public result I can support is straightforward: daily alert volume fell from roughly 300 to 75 and coverage was retained. I do not publish employer validation data. For a redesign like this, my validation standard is a maintained known-positive replay or representative fixture set that exercises the escalation path before older logic is retired.</p><p>Alert volume is only one part of the result. The stronger follow-up measures are per-incident-rule precision, analyst disposition, and whether the regression set still exercises the behaviors the detection is supposed to catch.</p></div><div class="scope-note"><span>THE TRADE</span><p>The tradeoff is lower sensitivity at the individual-rule alert level. Weak behaviors stop paging an analyst on their own, but they remain collected, scored, and available as part of the accumulated risk context. The measurement standard page sets out the <a href="/standards/measurement/#pushback">questions I would ask about this number</a> and what I would measure alongside it.</p></div></section>
+<section class="case-section" id="failure-modes"><div class="case-section-head"><span>06</span><h2>Failure modes I care about</h2><a aria-label="Link to Failure modes I care about section" class="section-anchor" href="#failure-modes">#</a></div><ul class="failure-list"><li>Risk scores drift upward until almost everything becomes high risk.</li><li>A risk incident rule aggregates unrelated activity and produces context without meaning.</li><li>A source stops feeding, so the absence of detections looks like a clean environment.</li><li>Analysts cannot tell which underlying behavior caused escalation.</li><li>Silent decay: a source changes format, the risk rule keeps running and returns nothing, and that behavior quietly stops contributing while the rule still reports as healthy.</li><li>The regression set stops being maintained, so new known-positive scenarios never join it and coverage ages out.</li></ul></section><section class="case-section next-iteration" id="next-iteration"><div class="case-section-head"><span>07</span><h2>What I would improve next</h2><a aria-label="Link to What I would improve next section" class="section-anchor" href="#next-iteration">#</a></div><div class="prose"><p>If I were doing the redesign again, I would instrument per-detection precision and analyst disposition before changing the alerting model. I would also make the known-positive regression set an automated gate on rule changes.</p></div></section>
+<section class="case-section" id="panel-questions"><div class="case-section-head"><span>08</span><h2>Questions I get asked</h2><a aria-label="Link to Questions I get asked section" class="section-anchor" href="#panel-questions">#</a></div><div class="qa-list"><details open><summary>Why not just tune the noisy correlation searches?</summary><p>Tuning individual searches can help, but risk aggregation changes the decision model. It lets lower-confidence behaviors contribute context without requiring every event to become an analyst-facing alert.</p></details><details open><summary>How do you defend the coverage claim?</summary><p>The supported result is that coverage was retained. I do not publish employer validation data. The public standard shows the regression method I expect for this kind of change: known-positive replay or representative fixtures, plus boundary and missing-data tests.</p></details><details open><summary>What metric would you add next?</summary><p>Per-detection precision over time, analyst disposition, and the ratio of risk incidents to confirmed incidents. Those metrics make tuning a continuous feedback loop.</p></details><details open><summary>Was 300 alerts a day a healthy baseline?</summary><p>No. The original model was already too noisy. I do not treat the whole reduction as proof that the redesign was better; the useful checks are whether coverage stayed intact, whether the remaining incidents carried better context, and whether analysts could work them more effectively.</p></details><details open><summary>What is the main RBA failure mode?</summary><p>Opaque scoring. If an analyst cannot explain why risk accumulated or which behavior matters, the model becomes harder to trust even if alert counts fall.</p></details></div></section>
+<a class="next-case" href="/work/rc4/"><span>Next case</span><b>RC4 remediation loop →</b></a>
+</div>
+</div>
+</div></div>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

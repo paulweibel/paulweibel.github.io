@@ -1,0 +1,32 @@
+/*
+  Representative feed-health pattern. Sanitized reconstruction, not
+  production configuration.
+
+  Design: the durable inventory of expected feeds is kept separate from
+  the recent-event health window, so a feed that has never reported is
+  distinguished from one that stopped.
+  Shape: tstats for what actually arrived, inputlookup append=t for what
+  should have, then one stats to reconcile. No join: a subsearch join is
+  bounded by subsearch limits and re-runs the inner search; append plus
+  stats scales with the number of feeds.
+*/
+| tstats latest(_time) as last_seen count as events
+    where index=* earliest=-7d
+    by index sourcetype
+| eval observed=1
+| inputlookup append=t expected_security_feeds
+| stats max(last_seen) as last_seen sum(events) as events
+        max(observed) as observed
+        values(expected_interval_sec) as expected_interval_sec
+        values(owner) as owner values(criticality) as criticality
+    by index sourcetype
+| eval age_sec = now() - last_seen
+| eval health = case(
+      isnull(expected_interval_sec),       "UNEXPECTED",
+      isnull(observed),                    "MISSING",
+      age_sec > expected_interval_sec * 2, "SILENT",
+      age_sec > expected_interval_sec,     "LATE",
+      true(),                              "HEALTHY")
+| where health != "HEALTHY"
+| table index sourcetype owner criticality last_seen age_sec events
+        health

@@ -1,0 +1,19 @@
+/*
+  Representative SPL shape for a risk-rule output: the contribution half
+  of risk-based alerting. Sanitized reconstruction. Not production
+  configuration. Rows produced here become scored risk events;
+  rba-risk-incident.spl shows how they are aggregated.
+*/
+| tstats summariesonly=t count
+    min(_time) as first_seen max(_time) as last_seen
+  from datamodel=Authentication.Authentication
+  where Authentication.action="failure"
+  by Authentication.user Authentication.src
+| rename Authentication.* as *
+| eval risk_object=user,
+       risk_object_type="user",
+       risk_score=case(count>=20,40,count>=10,20,true(),0)
+| where risk_score>0
+| eval risk_message="Repeated authentication failures from source=".src
+| table first_seen last_seen risk_object risk_object_type
+        risk_score risk_message count

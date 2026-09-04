@@ -1,0 +1,34 @@
+/*
+  Representative operational-health query shape. Sanitized
+  reconstruction.
+
+  Design: membership comes from a durable inventory with a lifecycle
+  state, so a forwarder that has been offline for weeks stays in the
+  denominator and a retired one ages out by rule rather than by silence.
+  A host that reports but is not in the inventory is surfaced too. Same
+  append-and-stats reconciliation as the feed-health pattern; no join.
+*/
+| tstats latest(_time) as last_seen count as events
+    where index=* earliest=-24h
+    by host
+| eval observed=1
+| inputlookup append=t expected_forwarder_inventory
+| stats max(last_seen) as last_seen sum(events) as events
+        max(observed) as observed
+        values(lifecycle_state) as lifecycle_state
+        values(owner) as owner
+    by host
+| where isnull(lifecycle_state) OR lifecycle_state="active"
+| eval age_sec = now() - last_seen
+| eval forwarder_health = case(
+      isnull(lifecycle_state), "UNINVENTORIED",
+      isnull(observed),        "NO_DATA_24H",
+      age_sec > 900,           "MISSING",
+      true(),                  "HEALTHY")
+| eval rank = case(forwarder_health="NO_DATA_24H",   0,
+                   forwarder_health="MISSING",       1,
+                   forwarder_health="UNINVENTORIED", 2,
+                   true(),                           3)
+| sort 0 rank - age_sec
+| table host owner lifecycle_state last_seen age_sec events
+        forwarder_health

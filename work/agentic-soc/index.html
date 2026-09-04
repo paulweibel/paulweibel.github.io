@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Reducing recurring SOC work with human approval | Paul Weibel</title>
+  <meta name="description" content="Python, PowerShell, and LLM-assisted workflows that reduced recurring SOC work by about 30% with read-only access and human approval.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/work/agentic-soc/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Reducing recurring SOC work with human approval | Paul Weibel">
+  <meta property="og:description" content="Python, PowerShell, and LLM-assisted workflows that reduced recurring SOC work by about 30% with read-only access and human approval.">
+  <meta property="og:url" content="https://paulweibel.com/work/agentic-soc/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-agentic-soc.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Read-only human-gated agentic SOC case study by Paul Weibel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reducing recurring SOC work with human approval | Paul Weibel">
+  <meta name="twitter:description" content="Python, PowerShell, and LLM-assisted workflows that reduced recurring SOC work by about 30% with read-only access and human approval.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-agentic-soc.png">
+  <meta name="twitter:image:alt" content="Read-only human-gated agentic SOC case study by Paul Weibel">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/" aria-current="page">Case studies</a><a href="/standards/measurement/">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="case-hero"><div class="container"><div class="case-breadcrumb"><a href="/case-studies/">Case studies</a><span>/</span><span>CASE_04</span></div><div class="case-hero-grid"><div><p class="kicker">SECURITY AUTOMATION</p><h1>Reducing recurring SOC work with human approval</h1><p class="page-lede">Python, PowerShell, and LLM-assisted workflows reduced recurring SOC work by about 30%, with read-only Splunk access and human approval before consequential actions.</p></div><div class="outcome-figure"><span>Outcome</span><strong><i>~</i>30%</strong><p>about 30% less recurring SOC work</p></div></div></div></section>
+<div class="section"><div class="container">
+<div class="case-layout">
+<nav aria-label="Case study sections" class="case-toc">
+<div class="toc-head"><span>Case map</span><b>CASE_04</b></div>
+<a href="#system-shape"><span>01</span>System shape</a><a href="#problem"><span>02</span>Problem</a><a href="#decisions"><span>03</span>Decisions</a><a href="#implementation-evidence"><span>04</span>Implementation</a><a href="#validation"><span>05</span>Validation</a><a href="#failure-modes"><span>06</span>Failure modes</a><a href="#next-iteration"><span>07</span>Next iteration</a><a href="#panel-questions"><span>08</span>Questions</a></nav>
+<div class="case-content">
+<div aria-label="Evidence provenance" class="evidence-provenance" role="group">
+<div><span>Outcome</span><b>MEASURED RESULT</b></div>
+<div><span>Design</span><b>SANITIZED DESCRIPTION</b></div>
+<div><span>Code</span><b>CLEAN-ROOM EXAMPLE</b></div>
+<div><span>Proprietary data</span><b>NOT PUBLISHED</b></div>
+</div>
+<p class="provenance-note">Architecture is representative and omits proprietary identifiers, thresholds, hostnames, and internal topology. The code panel is a clean-room reconstruction rendered directly from the public evidence file it links to.</p>
+<section class="case-section" id="system-shape"><div class="case-section-head"><span>01</span><h2>System shape</h2><a aria-label="Link to System shape section" class="section-anchor" href="#system-shape">#</a></div><div aria-label="Scrollable representative architecture diagram" class="architecture" role="region" tabindex="0"><svg aria-label="Representative architecture flow" class="arch-svg" role="img" viewbox="0 0 920 180"><defs><marker id="arrow" markerheight="8" markerwidth="8" orient="auto" refx="7" refy="4"><path class="arrow-head" d="M0,0 L8,4 L0,8 z" fill="#65d9ed"></path></marker></defs><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="70" y="40"></rect><text class="arch-label" fill="#edf5f7" x="86" y="72">Analyst</text><text class="arch-sub" fill="#82939d" x="86" y="98">question / task</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="220" x2="266" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="280" y="40"></rect><text class="arch-label" fill="#edf5f7" x="296" y="72">Copilot + MCP</text><text class="arch-sub" fill="#82939d" x="296" y="98">bounded workflow</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="430" x2="476" y1="86" y2="86"></line><g class="arch-node active"><rect fill="#0c1a21" height="92" rx="8" stroke="#65d9ed" stroke-width="1.2" width="150" x="490" y="40"></rect><text class="arch-label" fill="#edf5f7" x="506" y="72">Splunk</text><text class="arch-sub" fill="#82939d" x="506" y="98">read-only context</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="640" x2="686" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="700" y="40"></rect><text class="arch-label" fill="#edf5f7" x="716" y="72">Human gate</text><text class="arch-sub" fill="#82939d" x="716" y="98">approve action</text></g></svg></div></section>
+<section class="case-section" id="problem"><div class="case-section-head"><span>02</span><h2>Problem</h2><a aria-label="Link to Problem section" class="section-anchor" href="#problem">#</a></div><div class="prose"><p>The goal was to remove repetitive work while keeping consequential decisions with a person. An autonomous SOC was never the target. Python and PowerShell jobs handled deterministic tasks, while LLM workflows used Model Context Protocol servers on a read-only Splunk role. Human approval remained required before agent actions that could change state.</p></div></section>
+<section class="case-section" id="decisions"><div class="case-section-head"><span>03</span><h2>Engineering decisions</h2><a aria-label="Link to Engineering decisions section" class="section-anchor" href="#decisions">#</a></div><div aria-label="Scrollable engineering decision table" class="table-wrap" role="region" tabindex="0"><table class="decision-table"><thead><tr><th>Decision</th><th>Why</th><th>Tradeoff / boundary</th></tr></thead><tbody><tr><td>Give the agent read-only Splunk access</td><td>Enrichment and investigation benefit from broad search context without granting write authority.</td><td>Read-only access still requires data-scoping and prompt-injection awareness.</td></tr><tr><td>Use MCP as a capability boundary</td><td>Expose explicit tools instead of giving an LLM arbitrary system access.</td><td>Tool schemas reduce freedom but make behavior easier to review and constrain.</td></tr><tr><td>Require human approval before writes</td><td>Keep accountability for consequential actions with an analyst.</td><td>Approval adds friction, which is acceptable when the alternative is unbounded automation.</td></tr><tr><td>Use scripts for deterministic work</td><td>Python and PowerShell are preferable when the task has a stable, testable path.</td><td>LLMs should not replace simpler automation merely because they are available.</td></tr></tbody></table></div></section><section class="case-section implementation-section" id="implementation-evidence"><div class="case-section-head"><span>04</span><h2>Implementation evidence</h2><a aria-label="Link to Implementation evidence section" class="section-anchor" href="#implementation-evidence">#</a></div><div class="implementation-grid"><div class="code-panel"><div class="code-panel-head"><span>YAML</span><b>Representative agent capability boundary</b></div><pre><code># Representative control model for an LLM-assisted SecOps workflow.
+# Sanitized reconstruction, not a production authorization export.
+agent:
+  purpose: enrich_security_context
+  data_access: read_only
+  allowed_tools:
+    - search_security_events
+    - read_detection_context
+    - summarize_evidence
+  denied_capabilities:
+    - modify_detection
+    - modify_risk
+    - close_incident
+    - execute_shell
+
+approval_gate:
+  required_before:
+    - any_state_change
+    - any_external_notification
+  approver: human_analyst
+
+failure_policy:
+  permission_error: fail_closed
+  missing_tool: stop_and_explain
+  evidence_conflict: surface_uncertainty</code></pre></div><div class="implementation-notes"><span class="evidence-label">Sanitized reconstruction</span><p>The artifact is a public control model, not a production authorization export. It makes the intended boundaries reviewable: read-only evidence access, narrow tools, explicit denied capabilities, and human approval before state change.</p><h3>Regression cases</h3><ul class="test-list"><li>Read-only enrichment succeeds without granting a state-changing tool.</li><li>Permission or tool failures stop the workflow instead of falling back to a broader capability.</li><li>Model interpretation stays distinguishable from retrieved security evidence.</li><li>Any proposed state change remains visible to and approved by a human analyst.</li></ul><div class="evidence-actions"><a class="button secondary" href="/evidence/agentic-soc-control-model.yaml">Open artifact</a><a class="button secondary" href="https://github.com/paulweibel/paulweibel.github.io/blob/main/evidence/agentic-soc-control-model.yaml">View on GitHub ↗</a></div></div></div></section>
+<section class="case-section" id="validation"><div class="case-section-head"><span>05</span><h2>Validation</h2><a aria-label="Link to Validation section" class="section-anchor" href="#validation">#</a></div><div class="prose validated"><p>Validation focuses on boundary behavior as much as task completion. Can the agent perform the intended read-only enrichment? Does it fail closed when a tool or permission is unavailable? Are proposed actions visible to a person before execution? Can the analyst distinguish retrieved evidence from model-generated interpretation?</p></div></section>
+<section class="case-section" id="failure-modes"><div class="case-section-head"><span>06</span><h2>Failure modes I care about</h2><a aria-label="Link to Failure modes I care about section" class="section-anchor" href="#failure-modes">#</a></div><ul class="failure-list"><li>Prompt content attempts to redirect the agent outside the intended task.</li><li>The model overstates confidence and an analyst treats generated interpretation as evidence.</li><li>A tool exposes more capability than the workflow requires.</li><li>The workflow silently falls back to an unsafe path when a dependency fails.</li></ul></section><section class="case-section next-iteration" id="next-iteration"><div class="case-section-head"><span>07</span><h2>What I would improve next</h2><a aria-label="Link to What I would improve next section" class="section-anchor" href="#next-iteration">#</a></div><div class="prose"><p>Add adversarial prompt-injection fixtures and explicit provenance labels on every retrieved datum so the workflow can be regression-tested against over-trust and instruction hijacking.</p></div></section>
+<section class="case-section" id="panel-questions"><div class="case-section-head"><span>08</span><h2>Questions I get asked</h2><a aria-label="Link to Questions I get asked section" class="section-anchor" href="#panel-questions">#</a></div><div class="qa-list"><details open><summary>Is this an autonomous SOC?</summary><p>No. The design intentionally keeps the agent in a bounded support role. Read-only context and human approval are features, not temporary limitations.</p></details><details open><summary>Why MCP?</summary><p>It creates a clean contract between the model and security tools. Instead of arbitrary access, the workflow gets named capabilities with explicit inputs and outputs.</p></details><details open><summary>Where should an LLM not be used?</summary><p>Deterministic tasks with stable logic are usually better as normal code. LLMs are useful where language, summarization, or flexible reasoning adds value, not as a default automation engine.</p></details><details open><summary>What is the biggest risk?</summary><p>Over-trust. A polished answer can look more certain than the evidence supports, so the workflow must preserve source context and keep consequential decisions with the analyst.</p></details></div></section>
+<a class="next-case" href="/work/ops-report/"><span>Next case</span><b>Splunk operational health →</b></a>
+</div>
+</div>
+</div></div>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

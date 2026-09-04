@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d13">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="portfolio-version" content="22.1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <title>Splunk operational health in a daily exception digest | Paul Weibel</title>
+  <meta name="description" content="A Splunk app that turns ingest, forwarder, and search health into a daily exception digest for engineers.">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet">
+  <link rel="canonical" href="https://paulweibel.com/work/ops-report/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Paul Weibel Security Engineering">
+  <meta property="og:title" content="Splunk operational health in a daily exception digest | Paul Weibel">
+  <meta property="og:description" content="A Splunk app that turns ingest, forwarder, and search health into a daily exception digest for engineers.">
+  <meta property="og:url" content="https://paulweibel.com/work/ops-report/">
+  <meta property="og:image" content="https://paulweibel.com/assets/img/og-ops-report.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Splunk operational health engineering case study by Paul Weibel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Splunk operational health in a daily exception digest | Paul Weibel">
+  <meta name="twitter:description" content="A Splunk app that turns ingest, forwarder, and search health into a daily exception digest for engineers.">
+  <meta name="twitter:image" content="https://paulweibel.com/assets/img/og-ops-report.png">
+  <meta name="twitter:image:alt" content="Splunk operational health engineering case study by Paul Weibel">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/assets/css/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="shell">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="Paul Weibel home"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></a>
+    <nav class="nav-links" aria-label="Primary"><a href="/skills/">Skills</a><a href="/case-studies/" aria-current="page">Case studies</a><a href="/standards/measurement/">Measurement</a><a href="/stack/">Stack</a><a href="/about/">About</a><a class="nav-resume" href="/resume/">Resume</a><a class="nav-contact" href="mailto:contact@paulweibel.com">Contact</a></nav>
+  </div>
+</header>
+<main id="main">
+<section class="case-hero"><div class="container"><div class="case-breadcrumb"><a href="/case-studies/">Case studies</a><span>/</span><span>CASE_05</span></div><div class="case-hero-grid"><div><p class="kicker">SECURITY PLATFORM ENGINEERING</p><h1>Splunk operational health in a daily exception digest</h1><p class="page-lede">A Splunk app that turns ingest, forwarder, and search health into a daily exception digest for engineers.</p></div><div class="outcome-figure"><span>Outcome</span><strong>DAILY</strong><p>operational digest for platform health</p></div></div></div></section>
+<div class="section"><div class="container">
+<div class="case-layout">
+<nav aria-label="Case study sections" class="case-toc">
+<div class="toc-head"><span>Case map</span><b>CASE_05</b></div>
+<a href="#system-shape"><span>01</span>System shape</a><a href="#problem"><span>02</span>Problem</a><a href="#decisions"><span>03</span>Decisions</a><a href="#implementation-evidence"><span>04</span>Implementation</a><a href="#validation"><span>05</span>Validation</a><a href="#failure-modes"><span>06</span>Failure modes</a><a href="#next-iteration"><span>07</span>Next iteration</a><a href="#panel-questions"><span>08</span>Questions</a></nav>
+<div class="case-content">
+<div aria-label="Evidence provenance" class="evidence-provenance" role="group">
+<div><span>Outcome</span><b>MEASURED RESULT</b></div>
+<div><span>Design</span><b>SANITIZED DESCRIPTION</b></div>
+<div><span>Code</span><b>CLEAN-ROOM EXAMPLE</b></div>
+<div><span>Proprietary data</span><b>NOT PUBLISHED</b></div>
+</div>
+<p class="provenance-note">Architecture is representative and omits proprietary identifiers, thresholds, hostnames, and internal topology. The code panel is a clean-room reconstruction rendered directly from the public evidence file it links to.</p>
+<section class="case-section" id="system-shape"><div class="case-section-head"><span>01</span><h2>System shape</h2><a aria-label="Link to System shape section" class="section-anchor" href="#system-shape">#</a></div><div aria-label="Scrollable representative architecture diagram" class="architecture" role="region" tabindex="0"><svg aria-label="Representative architecture flow" class="arch-svg" role="img" viewbox="0 0 920 180"><defs><marker id="arrow" markerheight="8" markerwidth="8" orient="auto" refx="7" refy="4"><path class="arrow-head" d="M0,0 L8,4 L0,8 z" fill="#65d9ed"></path></marker></defs><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="70" y="40"></rect><text class="arch-label" fill="#edf5f7" x="86" y="72">Splunk health</text><text class="arch-sub" fill="#82939d" x="86" y="98">ingest + forwarders</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="220" x2="266" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="280" y="40"></rect><text class="arch-label" fill="#edf5f7" x="296" y="72">Scheduled searches</text><text class="arch-sub" fill="#82939d" x="296" y="98">normalize status</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="430" x2="476" y1="86" y2="86"></line><g class="arch-node active"><rect fill="#0c1a21" height="92" rx="8" stroke="#65d9ed" stroke-width="1.2" width="150" x="490" y="40"></rect><text class="arch-label" fill="#edf5f7" x="506" y="72">Exception layer</text><text class="arch-sub" fill="#82939d" x="506" y="98">rank issues</text></g><line class="arch-line" marker-end="url(#arrow)" stroke="#405563" stroke-width="1.5" x1="640" x2="686" y1="86" y2="86"></line><g class="arch-node"><rect fill="#0b1219" height="92" rx="8" stroke="#2a3a46" stroke-width="1.2" width="150" x="700" y="40"></rect><text class="arch-label" fill="#edf5f7" x="716" y="72">Digest</text><text class="arch-sub" fill="#82939d" x="716" y="98">engineer action</text></g></svg></div></section>
+<section class="case-section" id="problem"><div class="case-section-head"><span>02</span><h2>Problem</h2><a aria-label="Link to Problem section" class="section-anchor" href="#problem">#</a></div><div class="prose"><p>Platform health data can become another dashboard nobody checks. The goal of the Ops Report is different: collect the indicators of ingest, forwarder, and search problems, rank the exceptions, and deliver a concise daily view that tells an engineer where to look next.</p></div></section>
+<section class="case-section" id="decisions"><div class="case-section-head"><span>03</span><h2>Engineering decisions</h2><a aria-label="Link to Engineering decisions section" class="section-anchor" href="#decisions">#</a></div><div aria-label="Scrollable engineering decision table" class="table-wrap" role="region" tabindex="0"><table class="decision-table"><thead><tr><th>Decision</th><th>Why</th><th>Tradeoff / boundary</th></tr></thead><tbody><tr><td>Design exception-first</td><td>Healthy systems need less visual weight than actionable deviations.</td><td>A digest can hide nuance, so deep links or supporting searches must remain available.</td></tr><tr><td>Separate durable inventory from health thresholds</td><td>A forwarder that has been offline for a long time should not disappear from the denominator just because it has no recent events.</td><td>Durable baselines need lifecycle rules so retired assets do not live forever.</td></tr><tr><td>Make the email/client constraints part of the requirements</td><td>Operational reports are only useful if they render reliably where engineers read them.</td><td>Compatibility work can limit visual techniques available in richer browsers.</td></tr><tr><td>Keep safety in the report pipeline</td><td>Report output should not expose sensitive fields merely because they exist in Splunk.</td><td>Redaction and safe-to-send logic add another layer to maintain.</td></tr></tbody></table></div></section><section class="case-section implementation-section" id="implementation-evidence"><div class="case-section-head"><span>04</span><h2>Implementation evidence</h2><a aria-label="Link to Implementation evidence section" class="section-anchor" href="#implementation-evidence">#</a></div><div class="implementation-grid"><div class="code-panel"><div class="code-panel-head"><span>SPL</span><b>Representative durable-inventory health query</b></div><pre><code>/*
+  Representative operational-health query shape. Sanitized
+  reconstruction.
+
+  Design: membership comes from a durable inventory with a lifecycle
+  state, so a forwarder that has been offline for weeks stays in the
+  denominator and a retired one ages out by rule rather than by silence.
+  A host that reports but is not in the inventory is surfaced too. Same
+  append-and-stats reconciliation as the feed-health pattern; no join.
+*/
+| tstats latest(_time) as last_seen count as events
+    where index=* earliest=-24h
+    by host
+| eval observed=1
+| inputlookup append=t expected_forwarder_inventory
+| stats max(last_seen) as last_seen sum(events) as events
+        max(observed) as observed
+        values(lifecycle_state) as lifecycle_state
+        values(owner) as owner
+    by host
+| where isnull(lifecycle_state) OR lifecycle_state="active"
+| eval age_sec = now() - last_seen
+| eval forwarder_health = case(
+      isnull(lifecycle_state), "UNINVENTORIED",
+      isnull(observed),        "NO_DATA_24H",
+      age_sec &gt; 900,           "MISSING",
+      true(),                  "HEALTHY")
+| eval rank = case(forwarder_health="NO_DATA_24H",   0,
+                   forwarder_health="MISSING",       1,
+                   forwarder_health="UNINVENTORIED", 2,
+                   true(),                           3)
+| sort 0 rank - age_sec
+| table host owner lifecycle_state last_seen age_sec events
+        forwarder_health</code></pre></div><div class="implementation-notes"><span class="evidence-label">Sanitized reconstruction</span><p>The public query demonstrates a key reliability decision: build fleet membership from durable inventory, then apply a separate recency threshold. It contains no production inventory, hostnames, indexes, or thresholds beyond the illustrative health window.</p><h3>Regression cases</h3><ul class="test-list"><li>A long-offline active forwarder remains visible instead of disappearing after the event lookback expires.</li><li>Retired assets can leave the denominator through lifecycle state rather than event absence.</li><li>Known ingest or forwarder exceptions rank above healthy rows in the final decision surface.</li><li>Email output uses an explicit safe-to-send field set rather than raw event payloads.</li></ul><div class="evidence-actions"><a class="button secondary" href="/evidence/ops-report-health.spl">Open artifact</a><a class="button secondary" href="https://github.com/paulweibel/paulweibel.github.io/blob/main/evidence/ops-report-health.spl">View on GitHub ↗</a></div></div></div></section>
+<section class="case-section" id="validation"><div class="case-section-head"><span>05</span><h2>Validation</h2><a aria-label="Link to Validation section" class="section-anchor" href="#validation">#</a></div><div class="prose validated"><p>Validation asks both engineering and presentation questions: do health searches return the right population, do thresholds classify expected states correctly, do known offline or volume-deviation scenarios appear, and does the final digest remain readable in the supported clients?</p></div></section>
+<section class="case-section" id="failure-modes"><div class="case-section-head"><span>06</span><h2>Failure modes I care about</h2><a aria-label="Link to Failure modes I care about section" class="section-anchor" href="#failure-modes">#</a></div><ul class="failure-list"><li>Long-offline forwarders disappear because inventory is built only from recent activity.</li><li>A sudden ingest drop is hidden by a rolling average that reacts too slowly.</li><li>The email renders differently across clients and buries the highest-priority exception.</li><li>The report exposes a field that is acceptable in Splunk but not appropriate for email.</li></ul></section><section class="case-section next-iteration" id="next-iteration"><div class="case-section-head"><span>07</span><h2>What I would improve next</h2><a aria-label="Link to What I would improve next section" class="section-anchor" href="#next-iteration">#</a></div><div class="prose"><p>Add fixture-driven rendering tests for the supported mail clients and machine-check the safe-to-send field contract alongside the Splunk search logic.</p></div></section>
+<section class="case-section" id="panel-questions"><div class="case-section-head"><span>08</span><h2>Questions I get asked</h2><a aria-label="Link to Questions I get asked section" class="section-anchor" href="#panel-questions">#</a></div><div class="qa-list"><details open><summary>Why email instead of another dashboard?</summary><p>A daily digest creates a push model for health exceptions. Engineers can still use Splunk for exploration, but they do not have to remember to open another dashboard to discover a problem.</p></details><details open><summary>How do you avoid stale inventory?</summary><p>Use a durable baseline or authoritative lookup for membership, then apply a separate health window. Lifecycle rules age out retired assets without letting long-offline systems vanish prematurely.</p></details><details open><summary>What belongs in the first screen?</summary><p>Only the exceptions that can change an engineer decision: missing forwarders, ingest deviations, search failures, or other health states that require attention.</p></details><details open><summary>How do you keep a report safe to send?</summary><p>Treat email as a different disclosure boundary from the SIEM. Explicitly select fields, sanitize dynamic content, and avoid shipping raw event data unless it is required.</p></details></div></section>
+<a class="next-case" href="/work/rba/"><span>Next case</span><b>Back to RBA →</b></a>
+</div>
+</div>
+</div></div>
+</main>
+<footer class="footer">
+  <div class="container footer-grid">
+    <div><div class="brand footer-brand"><span class="brand-mark">PW</span><span class="brand-copy"><span class="brand-name">Paul Weibel</span></span></div><p>Security engineer. Detection engineering, SIEM, security telemetry, incident response, secure web access, and bounded automation for security operations.</p></div>
+    <div class="footer-links"><a href="/resume/">Resume</a><a href="https://github.com/paulweibel" rel="me">GitHub</a><a href="https://linkedin.com/in/paul-weibel" rel="me">LinkedIn</a><a href="mailto:contact@paulweibel.com">contact@paulweibel.com</a></div>
+  </div>
+  <div class="container footer-meta"><span>Unlisted: shared by link, not indexed</span><span>Strict CSP · zero third-party runtime · no trackers · no JavaScript</span></div>
+</footer>
+</body>
+</html>

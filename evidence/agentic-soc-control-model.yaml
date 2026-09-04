@@ -1,0 +1,25 @@
+# Representative control model for an LLM-assisted SecOps workflow.
+# Sanitized reconstruction, not a production authorization export.
+agent:
+  purpose: enrich_security_context
+  data_access: read_only
+  allowed_tools:
+    - search_security_events
+    - read_detection_context
+    - summarize_evidence
+  denied_capabilities:
+    - modify_detection
+    - modify_risk
+    - close_incident
+    - execute_shell
+
+approval_gate:
+  required_before:
+    - any_state_change
+    - any_external_notification
+  approver: human_analyst
+
+failure_policy:
+  permission_error: fail_closed
+  missing_tool: stop_and_explain
+  evidence_conflict: surface_uncertainty
